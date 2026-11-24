@@ -8,7 +8,7 @@ if (menuToggle && navLinks) {
   });
 }
 
-// Case Study Filter Tabs
+// Operational Pillar Filter Tabs
 const filterBtns = document.querySelectorAll('.filter-btn');
 const projectCards = document.querySelectorAll('.project-card');
 
@@ -19,8 +19,8 @@ filterBtns.forEach((btn) => {
 
     const filter = btn.getAttribute('data-filter');
     projectCards.forEach((card) => {
-      const status = card.getAttribute('data-status');
-      if (filter === 'all' || status === filter) {
+      const pillar = card.getAttribute('data-pillar');
+      if (filter === 'all' || pillar === filter) {
         card.classList.remove('hidden');
       } else {
         card.classList.add('hidden');
@@ -44,6 +44,77 @@ function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
 }
 
+// Sample Pydantic JSON Schema Inspector
+const sampleSchemas = {
+  sales: {
+    title: 'POST /enrich-lead -> LeadEnrichmentResponse',
+    payload: {
+      lead_id: 'LD-409',
+      company_name: 'Kovai Logistics',
+      icp_fit_score: 88,
+      pain_point_summary: 'Manual freight quote triage across 14 regional dispatchers',
+      personalized_opener: 'Noticed Kovai Logistics is scaling regional dispatch—we help ops teams automate quote intake in n8n.',
+      route_to_priority_crm: true
+    }
+  },
+  finance: {
+    title: 'POST /audit-invoice -> InvoiceAuditResponse',
+    payload: {
+      invoice_number: 'INV-2026-0891',
+      vendor_name: 'CloudScale Infrastructure Ltd',
+      subtotal: 1250.0,
+      tax: 125.0,
+      total: 1375.0,
+      math_verified: true,
+      needs_review: true,
+      review_reason: 'Invoice total ($1,375.00) exceeds $1,000.00 auto-approval threshold'
+    }
+  },
+  support: {
+    title: 'POST /triage-ticket -> TicketTriageResponse',
+    payload: {
+      ticket_id: 'TCK-102',
+      customer_email: 'finance@client.example',
+      category: 'billing',
+      confidence_score: 0.7,
+      draft_reply: 'Your refund request has been received. Per our Escalation Policy, refund requests require manual billing review.',
+      sources_used: ['1. Billing & Invoices', '4. Escalation Policy'],
+      needs_human_escalation: true,
+      escalation_reason: 'Refund request requires manual review and escalation.'
+    }
+  }
+};
+
+function openJsonModal(pillar) {
+  const modal = document.getElementById('jsonModal');
+  const title = document.getElementById('jsonModalTitle');
+  const code = document.getElementById('jsonModalCode');
+  const entry = sampleSchemas[pillar];
+
+  if (!entry) return;
+  title.textContent = entry.title;
+  code.textContent = JSON.stringify(entry.payload, null, 2);
+  modal.classList.add('open');
+}
+
+function closeJsonModal() {
+  document.getElementById('jsonModal').classList.remove('open');
+}
+
+// One-Click Copy Email
+function copyEmail() {
+  const btn = document.getElementById('copyEmailBtn');
+  navigator.clipboard.writeText('taygaloolprojects@gmail.com').then(() => {
+    btn.textContent = 'Copied! (taygaloolprojects@gmail.com)';
+    setTimeout(() => {
+      btn.textContent = 'Copy Email';
+    }, 2500);
+  });
+}
+
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'Escape') {
+    closeLightbox();
+    closeJsonModal();
+  }
 });
