@@ -44,10 +44,11 @@ function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
 }
 
-// Sample Pydantic JSON Schema Inspector
+// Sample Pydantic JSON Schema & Operational Spec Inspector
 const sampleSchemas = {
   sales: {
-    title: 'POST /enrich-lead -> LeadEnrichmentResponse',
+    title: 'POST /enrich-lead -> LeadEnrichmentResponse (Pydantic v2)',
+    opsNote: 'Error Handling: FastAPI returns HTTP 422 on missing lead fields; Make.com router isolates scores < 70 from priority outreach.',
     payload: {
       lead_id: 'LD-409',
       company_name: 'Kovai Logistics',
@@ -58,7 +59,8 @@ const sampleSchemas = {
     }
   },
   finance: {
-    title: 'POST /audit-invoice -> InvoiceAuditResponse',
+    title: 'POST /audit-invoice -> InvoiceAuditResponse (Pydantic v2)',
+    opsNote: 'Error Handling: Deterministic Python arithmetic reconciles subtotal + tax against total; discrepancies or bills >= $1,000 route to Review_Queue.',
     payload: {
       invoice_number: 'INV-2026-0891',
       vendor_name: 'CloudScale Infrastructure Ltd',
@@ -71,7 +73,8 @@ const sampleSchemas = {
     }
   },
   support: {
-    title: 'POST /triage-ticket -> TicketTriageResponse',
+    title: 'POST /triage-ticket -> TicketTriageResponse (Pydantic v2)',
+    opsNote: 'Error Handling: Grounds replies strictly against company_sop.md; routes confidence < 0.75 or refund/security keywords to Escalation_Queue.',
     payload: {
       ticket_id: 'TCK-102',
       customer_email: 'finance@client.example',
@@ -88,11 +91,13 @@ const sampleSchemas = {
 function openJsonModal(pillar) {
   const modal = document.getElementById('jsonModal');
   const title = document.getElementById('jsonModalTitle');
+  const ops = document.getElementById('jsonModalOps');
   const code = document.getElementById('jsonModalCode');
   const entry = sampleSchemas[pillar];
 
   if (!entry) return;
   title.textContent = entry.title;
+  ops.textContent = entry.opsNote;
   code.textContent = JSON.stringify(entry.payload, null, 2);
   modal.classList.add('open');
 }
